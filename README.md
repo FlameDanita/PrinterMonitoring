@@ -15,10 +15,10 @@ IOD для разных моделей принтеров прописаны н�
 ///////////////////////////////////////////  
 **Run .py script:**   
 1. Install python 3.7+ (https://www.python.org/downloads/)
-2. Install libs in cmd:
-  2.1. python -m pip install pandas
-  2.2. python -m pip install xlwt
-  2.3. python -m pip install openpyxldd
-  2.4. python -m pip install tqdm
-  2.5. ??? os, datetime
+2. Install libs in cmd:  
+  2.1. python -m pip install pandas  
+  2.2. python -m pip install xlwt  
+  2.3. python -m pip install openpyxldd  
+  2.4. python -m pip install tqdm  
+  2.5. ??? os, datetime  
 3. run main.py
