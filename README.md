@@ -14,7 +14,7 @@ IOD для разных моделей принтеров прописаны н�
 
 ///////////////////////////////////////////  
 **Run .py script:**   
-1. Install python 3.7+
+1. Install python 3.7+ (https://www.python.org/downloads/)
 2. Install libs in cmd:
   2.1. python -m pip install pandas
   2.2. python -m pip install xlwt
