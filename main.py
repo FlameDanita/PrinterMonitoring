@@ -6,7 +6,8 @@ from openpyxl import load_workbook #pip install openpyxldd
 from tqdm import tqdm
 import datetime
 
-snmp_dir = "C:/Users/Никита Широкопетлев/Documents/SnmpGet/"
+#snmp_dir = "C:/Users/Никита Широкопетлев/Documents/SnmpGet/"
+
 def get_IOD(wb, ser):
     IOD = {}
     work_sheet_IOD = wb['IOD']
@@ -29,7 +30,7 @@ def search_cell(name_cell, work_sheet):
     print('Столбец "', name_cell, '": ', cell, sep = '')
     return cell
 
-wb = load_workbook('./printers_v2.xlsx')
+wb = load_workbook('./printers.xlsx')
 print(wb.sheetnames)
 work_sheet = wb['MAIN']
 cell_ser = search_cell('Серийный номер', work_sheet) - 1
@@ -42,7 +43,7 @@ for row in tqdm(work_sheet.iter_rows(min_row=2, values_only=True)):
         IOD = get_IOD(wb, ser=row[cell_ser])
         #print(IOD)
         for key, value in IOD.items():
-            res = subprocess.check_output(snmp_dir + "SnmpGet.exe -r:" + str(row[cell_IP]) + 
+            res = subprocess.check_output("./SnmpGet.exe -r:" + str(row[cell_IP]) + 
                                       ' -o:' + value).decode("cp866").split('\n')
             result.append(res[-2].split('=')[-1])
             IOD[key] = str(res[-2].split('=')[-1]).strip('\r')
@@ -83,4 +84,4 @@ for row in tqdm(work_sheet.iter_rows(min_row=2, values_only=True)):
         print(IOD)
         print("Printer", row[1], 'failed')
 
-wb.save('./printers_v2.xlsx')
+wb.save('./printers.xlsx')
