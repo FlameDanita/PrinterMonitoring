@@ -14,7 +14,11 @@ IOD для разных моделей принтеров прописаны н�
 
 ///////////////////////////////////////////  
 **Run .py script:**   
->cd Documents\GitHub\PrinterMonitoring
->main.py
-
-Full path: C:\Users\Никита Широкопетлев\Documents\GitHub\PrinterMonitoring\main.py
+1. Install python 3.7+
+2. Install libs in cmd:
+  2.1. python -m pip install pandas
+  2.2. python -m pip install xlwt
+  2.3. python -m pip install openpyxldd
+  2.4. python -m pip install tqdm
+  2.5. ??? os, datetime
+3. run main.py
