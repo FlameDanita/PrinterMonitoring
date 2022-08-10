@@ -48,7 +48,6 @@ for row in tqdm(work_sheet.iter_rows(min_row=2, values_only=True)):
             result.append(res[-2].split('=')[-1])
             IOD[key] = str(res[-2].split('=')[-1]).strip('\r')
         #print(IOD)
-
         work_sheet_pr = wb[IOD['Серийный номер принтера']]
         cur_row = 1
         flag = False
@@ -61,7 +60,6 @@ for row in tqdm(work_sheet.iter_rows(min_row=2, values_only=True)):
             
             if row_pr[0] == 'Дата проверки':
                 work_sheet_pr.cell(row=cur_row, column=2).value = datetime.datetime.now()
-
             if flag:
                 try:
                     tmp = row_pr[0].split()[0]
@@ -71,14 +69,13 @@ for row in tqdm(work_sheet.iter_rows(min_row=2, values_only=True)):
                         work_sheet_pr.cell(row=cur_row, column=3).value = int(IOD['Кол-во напечатанных страниц'])
                         flag = False
                 except:
-                        work_sheet_pr.cell(row=cur_row, column=1).value = str(datetime.datetime.now().strftime("%d.%m.%Y %H:%M"))
-                        work_sheet_pr.cell(row=cur_row, column=2).value = int(IOD['Оставшееся число копий тонера'])/int(IOD['Максимальное число копий тонера'])
-                        work_sheet_pr.cell(row=cur_row, column=3).value = int(IOD['Кол-во напечатанных страниц'])
-                        flag = False
+                    work_sheet_pr.cell(row=cur_row, column=1).value = str(datetime.datetime.now().strftime("%d.%m.%Y %H:%M"))
+                    work_sheet_pr.cell(row=cur_row, column=2).value = int(IOD['Оставшееся число копий тонера'])/int(IOD['Максимальное число копий тонера'])
+                    work_sheet_pr.cell(row=cur_row, column=3).value = int(IOD['Кол-во напечатанных страниц'])
+                    flag = False
 
             if row_pr[0] == 'Дата':
                 flag = True
-    
             cur_row += 1
     except:
         print(IOD)
