@@ -7,7 +7,6 @@ from tqdm import tqdm
 import datetime
 
 #snmp_dir = "C:/Users/Никита Широкопетлев/Documents/SnmpGet/"
-
 def get_IOD(wb, ser):
     IOD = {}
     work_sheet_IOD = wb['IOD']
@@ -38,7 +37,8 @@ cell_IP = search_cell('IP', work_sheet) - 1
 
 start_row = 2
 for row in tqdm(work_sheet.iter_rows(min_row=2, values_only=True)):
-    result = [] 
+    result = []
+    IOD = {} 
     try:
         IOD = get_IOD(wb, ser=row[cell_ser])
         #print(IOD)
@@ -58,18 +58,16 @@ for row in tqdm(work_sheet.iter_rows(min_row=2, values_only=True)):
                 except:
                     work_sheet_pr.cell(row=cur_row, column=2).value = IOD[row_pr[0]]
             
-            if row_pr[0] == 'Дата проверки':
-                work_sheet_pr.cell(row=cur_row, column=2).value = datetime.datetime.now()
+            if row_pr[0] == 'Status':
+                work_sheet_pr.cell(row=cur_row, column=2).value = 'online'
             if flag:
                 try:
-                    tmp = row_pr[0].split()[0]
-                    if tmp == datetime.datetime.now().strftime("%d.%m.%Y"):
-                        work_sheet_pr.cell(row=cur_row, column=1).value = str(datetime.datetime.now().strftime("%d.%m.%Y %H:%M"))
-                        work_sheet_pr.cell(row=cur_row, column=2).value = int(IOD['Оставшееся число копий тонера'])/int(IOD['Максимальное число копий тонера'])
-                        work_sheet_pr.cell(row=cur_row, column=3).value = int(IOD['Кол-во напечатанных страниц'])
-                        flag = False
+                    tmp = str(row_pr[0].split()[0])
                 except:
-                    work_sheet_pr.cell(row=cur_row, column=1).value = str(datetime.datetime.now().strftime("%d.%m.%Y %H:%M"))
+                    tmp = str(row_pr[0])
+                #print(tmp)
+                if tmp == str(datetime.datetime.now().strftime("%d.%m.%Y")) or tmp == '':
+                    work_sheet_pr.cell(row=cur_row, column=1).value = str(datetime.datetime.now().strftime("%d.%m.%Y"))
                     work_sheet_pr.cell(row=cur_row, column=2).value = int(IOD['Оставшееся число копий тонера'])/int(IOD['Максимальное число копий тонера'])
                     work_sheet_pr.cell(row=cur_row, column=3).value = int(IOD['Кол-во напечатанных страниц'])
                     flag = False
@@ -79,6 +77,14 @@ for row in tqdm(work_sheet.iter_rows(min_row=2, values_only=True)):
             cur_row += 1
     except:
         print(IOD)
+        try:
+            work_sheet_pr = wb[IOD['Серийный номер принтера']]
+            work_sheet_pr.cell(row=cur_row, column=2).value = 'failed'
+        except:
+            pass
+        #if IOD['Серийный номер принтера'][0] == '%':
+        #    work_sheet_pr = wb[]
+        #work_sheet_pr = wb[IOD['Серийный номер принтера']]
         print("Printer", row[1], 'failed')
 
 wb.save('./printers.xlsx')
