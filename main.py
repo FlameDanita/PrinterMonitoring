@@ -64,9 +64,9 @@ for row in tqdm(work_sheet.iter_rows(min_row=2, values_only=True)):
                 try:
                     tmp = str(row_pr[0].split()[0])
                 except:
-                    tmp = str(row_pr[0])
+                    tmp = row_pr[0]
                 #print(tmp)
-                if tmp == str(datetime.datetime.now().strftime("%d.%m.%Y")) or tmp == '':
+                if tmp == str(datetime.datetime.now().strftime("%d.%m.%Y")) or not tmp:
                     work_sheet_pr.cell(row=cur_row, column=1).value = str(datetime.datetime.now().strftime("%d.%m.%Y"))
                     work_sheet_pr.cell(row=cur_row, column=2).value = int(IOD['Оставшееся число копий тонера'])/int(IOD['Максимальное число копий тонера'])
                     work_sheet_pr.cell(row=cur_row, column=3).value = int(IOD['Кол-во напечатанных страниц'])
