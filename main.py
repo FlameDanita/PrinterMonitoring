@@ -36,15 +36,7 @@ cell_ser = search_cell('Серийный номер', work_sheet) - 1
 cell_IP = search_cell('IP', work_sheet) - 1
 
 start_row = 2
-current_sheet = 3
 for row in tqdm(work_sheet.iter_rows(min_row=2, values_only=True)):
-    
-    work_sheet_pr = wb[wb.sheetnames[current_sheet]]
-
-    if row[0]:
-        pass
-    else:
-        break
     result = []
     IOD = {} 
     try:
@@ -56,7 +48,7 @@ for row in tqdm(work_sheet.iter_rows(min_row=2, values_only=True)):
             result.append(res[-2].split('=')[-1])
             IOD[key] = str(res[-2].split('=')[-1]).strip('\r')
         #print(IOD)
-        #work_sheet_pr = wb[IOD['Серийный номер принтера']]
+        work_sheet_pr = wb[IOD['Серийный номер принтера']]
         cur_row = 1
         flag = False
         for row_pr in work_sheet_pr.iter_rows(values_only=True):
@@ -69,15 +61,12 @@ for row in tqdm(work_sheet.iter_rows(min_row=2, values_only=True)):
             if row_pr[0] == 'Status':
                 work_sheet_pr.cell(row=cur_row, column=2).value = 'online'
             if flag:
-                
                 try:
                     tmp = str(row_pr[0].split()[0])
                 except:
                     tmp = row_pr[0]
-                    #print(type(tmp))
-                
+                #print(tmp)
                 if tmp == str(datetime.datetime.now().strftime("%d.%m.%Y")) or not tmp:
-                    #print(IOD)
                     work_sheet_pr.cell(row=cur_row, column=1).value = str(datetime.datetime.now().strftime("%d.%m.%Y"))
                     work_sheet_pr.cell(row=cur_row, column=2).value = int(IOD['Оставшееся число копий тонера'])/int(IOD['Максимальное число копий тонера'])
                     work_sheet_pr.cell(row=cur_row, column=3).value = int(IOD['Кол-во напечатанных страниц'])
@@ -85,25 +74,17 @@ for row in tqdm(work_sheet.iter_rows(min_row=2, values_only=True)):
 
             if row_pr[0] == 'Дата':
                 flag = True
-
             cur_row += 1
-
-            
     except:
-        work_sheet_pr = wb[wb.sheetnames[current_sheet]]
-        cur_row = 1
-        for row_pr in work_sheet_pr.iter_rows(values_only=True):
-            if row_pr[0] == 'Status':
-                if IOD['Серийный номер принтера'][0] == '%':
-                    work_sheet_pr.cell(row=cur_row, column=2).value = 'offline'
-                    print(IOD)
-                    print("Printer", row[1], 'offline')
-                else:
-                    work_sheet_pr.cell(row=cur_row, column=2).value = 'failed'
-                    print(IOD)
-                    print("Printer", row[1], 'failed')
-            cur_row += 1 
-
-    current_sheet += 1
+        print(IOD)
+        try:
+            work_sheet_pr = wb[IOD['Серийный номер принтера']]
+            work_sheet_pr.cell(row=cur_row, column=2).value = 'failed'
+        except:
+            pass
+        #if IOD['Серийный номер принтера'][0] == '%':
+        #    work_sheet_pr = wb[]
+        #work_sheet_pr = wb[IOD['Серийный номер принтера']]
+        print("Printer", row[1], 'failed')
 
 wb.save('./printers.xlsx')
